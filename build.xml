@@ -1,0 +1,46 @@
+<project name="vulpy" default="help" basedir=".">
+    
+    <!-- Set global properties for the project -->
+    <property name="src.dir" value="bad"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="python" value="python"/> <!-- Adjust if using python2 or other versions -->
+
+    <!-- Clean target to remove any previous build artifacts -->
+    <target name="clean">
+        <delete dir="${dist.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+    </target>
+
+    <!-- Target to install required Python packages -->
+    <target name="install-deps">
+        <exec executable="${python}">
+            <arg line="-m pip install -r requirements.txt"/>
+        </exec>
+    </target>
+
+    <!-- Run the application -->
+    <target name="run" depends="install-deps">
+        <exec executable="${python}">
+            <arg line="${src.dir}/vulpy.py"/>
+        </exec>
+    </target>
+
+    <!-- Run tests using unittest or pytest -->
+    <target name="test">
+        <exec executable="${python}">
+            <arg line="-m unittest discover -s tests"/>
+        </exec>
+    </target>
+
+    <!-- Target to create a distribution package (optional) -->
+    <target name="dist" depends="clean">
+        <mkdir dir="${dist.dir}"/>
+        <copy todir="${dist.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/*.py"/>
+            </fileset>
+        </copy>
+    </target>
+
+
+</project>
